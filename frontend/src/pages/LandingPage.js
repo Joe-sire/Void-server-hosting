@@ -218,7 +218,7 @@ export const LandingPage = () => {
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {mockPlans.map((plan) => (
+          {plans.map((plan) => (
             <Card 
               key={plan.id} 
               className={`bg-slate-900/50 border-purple-500/20 backdrop-blur-sm hover:border-purple-500/50 transition-all relative ${
