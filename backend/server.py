@@ -19,6 +19,7 @@ from auth import (
     get_session_data, create_or_update_user, create_session,
     get_current_user, require_admin, set_session_cookie, clear_session_cookie
 )
+from admin_routes import admin_user_router
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
