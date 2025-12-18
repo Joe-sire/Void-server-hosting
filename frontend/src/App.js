@@ -6,6 +6,7 @@ import { LandingPage } from "./pages/LandingPage";
 import { LoginPage } from "./pages/LoginPage";
 import { Dashboard } from "./pages/Dashboard";
 import { AdminPanel } from "./pages/AdminPanel";
+import { UserManagement } from "./pages/UserManagement";
 import { AuthCallback } from "./pages/AuthCallback";
 import { Toaster } from "./components/ui/sonner";
 
