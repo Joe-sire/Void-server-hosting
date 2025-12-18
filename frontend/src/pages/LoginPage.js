@@ -2,8 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { useAuth } from '../context/AuthContext';
-import { mockUser, mockAdmin } from '../mock';
 import { ArrowLeft } from 'lucide-react';
 
 export const LoginPage = () => {
@@ -13,13 +11,6 @@ export const LoginPage = () => {
     // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
     const redirectUrl = window.location.origin + '/auth/callback';
     window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
-  };
-
-  const handleDemoLogin = () => {
-    // For demo purposes - login with mock data
-    const { login } = useAuth();
-    login(mockAdmin);
-    navigate('/admin');
   };
 
   return (
