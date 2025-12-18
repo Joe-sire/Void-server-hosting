@@ -167,6 +167,16 @@ export const adminAPI = {
     const response = await api.put('/admin/content', content);
     return response.data;
   },
+
+  getAllUsers: async () => {
+    const response = await api.get('/admin/users');
+    return response.data.users;
+  },
+
+  updateUserRole: async (userId, role) => {
+    const response = await api.put(`/admin/users/${userId}/role`, { role });
+    return response.data;
+  },
 };
 
 export default api;
