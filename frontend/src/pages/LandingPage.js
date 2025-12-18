@@ -334,10 +334,10 @@ export const LandingPage = () => {
         </div>
         <div className="max-w-3xl mx-auto">
           <Accordion type="single" collapsible className="space-y-4">
-            {mockFAQs.map((faq) => (
+            {faqs.map((faq) => (
               <AccordionItem 
-                key={faq.id} 
-                value={faq.id}
+                key={faq.faq_id} 
+                value={faq.faq_id}
                 className="bg-slate-900/50 border border-purple-500/20 rounded-lg px-6 backdrop-blur-sm"
               >
                 <AccordionTrigger className="text-white hover:text-purple-400 text-left">
