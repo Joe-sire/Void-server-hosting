@@ -148,13 +148,13 @@ export const LandingPage = () => {
             Premium Minecraft Server Hosting
           </Badge>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-white leading-tight">
-            Build Your Dream
+            {siteContent.hero_title}
             <span className="block bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
-              Minecraft World
+              {siteContent.hero_subtitle}
             </span>
           </h1>
           <p className="text-xl md:text-2xl text-slate-300 mb-10 leading-relaxed">
-            Lightning-fast servers with 99.9% uptime. Start in 60 seconds with enterprise-grade DDoS protection.
+            {siteContent.hero_description}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
