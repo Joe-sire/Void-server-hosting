@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/card';
@@ -6,8 +6,8 @@ import { Badge } from '../components/ui/badge';
 import { Avatar, AvatarFallback } from '../components/ui/avatar';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../components/ui/accordion';
 import { Zap, Shield, Database, Globe, Clock, Headphones, Check, ArrowRight, Menu, X } from 'lucide-react';
-import { mockPlans, mockFeatures, mockTestimonials, mockFAQs } from '../mock';
-import { useState } from 'react';
+import { mockTestimonials } from '../mock';
+import { publicAPI } from '../services/api';
 
 const iconMap = {
   Zap, Shield, Database, Globe, Clock, Headphones
