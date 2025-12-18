@@ -16,6 +16,38 @@ const iconMap = {
 export const LandingPage = () => {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [plans, setPlans] = useState([]);
+  const [features, setFeatures] = useState([]);
+  const [faqs, setFaqs] = useState([]);
+  const [siteContent, setSiteContent] = useState({
+    hero_title: 'Build Your Dream',
+    hero_subtitle: 'Minecraft World',
+    hero_description: 'Lightning-fast servers with 99.9% uptime. Start in 60 seconds with enterprise-grade DDoS protection.'
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [plansData, featuresData, faqsData, contentData] = await Promise.all([
+          publicAPI.getPlans(),
+          publicAPI.getFeatures(),
+          publicAPI.getFAQs(),
+          publicAPI.getSiteContent()
+        ]);
+        setPlans(plansData);
+        setFeatures(featuresData);
+        setFaqs(faqsData);
+        setSiteContent(contentData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
@@ -24,6 +56,14 @@ export const LandingPage = () => {
       setMobileMenuOpen(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
