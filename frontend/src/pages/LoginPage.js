@@ -8,13 +8,18 @@ import { ArrowLeft } from 'lucide-react';
 
 export const LoginPage = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
 
-  const handleGoogleLogin = (isAdmin = false) => {
-    // Mock Google OAuth login
-    const user = isAdmin ? mockAdmin : mockUser;
-    login(user);
-    navigate(isAdmin ? '/admin' : '/dashboard');
+  const handleGoogleLogin = () => {
+    // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
+    const redirectUrl = window.location.origin + '/auth/callback';
+    window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
+  };
+
+  const handleDemoLogin = () => {
+    // For demo purposes - login with mock data
+    const { login } = useAuth();
+    login(mockAdmin);
+    navigate('/admin');
   };
 
   return (
