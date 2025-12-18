@@ -19,6 +19,15 @@ async def get_session_data(session_id: str) -> dict:
 
 async def create_or_update_user(db, user_data: dict) -> dict:
     """Create or update user in database"""
+    # Admin email whitelist - add your admin emails here
+    ADMIN_EMAILS = [
+        # "your-email@gmail.com",  # Uncomment and add your email
+        # "admin@example.com",
+    ]
+    
+    # Determine role based on email
+    role = "admin" if user_data["email"] in ADMIN_EMAILS else "user"
+    
     # Check if user exists by email
     existing_user = await db.users.find_one(
         {"email": user_data["email"]},
@@ -27,15 +36,19 @@ async def create_or_update_user(db, user_data: dict) -> dict:
     
     if existing_user:
         # Update existing user
+        update_data = {
+            "name": user_data["name"],
+            "picture": user_data.get("picture"),
+            "updated_at": datetime.now(timezone.utc)
+        }
+        
+        # Update role if user is in admin whitelist and not already admin
+        if role == "admin" and existing_user.get("role") != "admin":
+            update_data["role"] = "admin"
+        
         await db.users.update_one(
             {"email": user_data["email"]},
-            {
-                "$set": {
-                    "name": user_data["name"],
-                    "picture": user_data.get("picture"),
-                    "updated_at": datetime.now(timezone.utc)
-                }
-            }
+            {"$set": update_data}
         )
         return await db.users.find_one({"email": user_data["email"]}, {"_id": 0})
     else:
@@ -46,7 +59,7 @@ async def create_or_update_user(db, user_data: dict) -> dict:
             "email": user_data["email"],
             "name": user_data["name"],
             "picture": user_data.get("picture"),
-            "role": "user",  # Default role
+            "role": role,  # Assign role based on whitelist
             "created_at": datetime.now(timezone.utc)
         }
         await db.users.insert_one(new_user)
