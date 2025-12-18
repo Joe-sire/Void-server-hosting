@@ -50,7 +50,7 @@ export const LoginPage = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <Button 
-              onClick={() => handleGoogleLogin(false)}
+              onClick={handleGoogleLogin}
               className="w-full bg-white text-slate-900 hover:bg-slate-100 font-medium"
             >
               <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">
@@ -74,22 +74,9 @@ export const LoginPage = () => {
               Continue with Google
             </Button>
 
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-purple-500/20" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-slate-900/50 px-2 text-slate-400">Demo Mode</span>
-              </div>
-            </div>
-
-            <Button 
-              onClick={() => handleGoogleLogin(true)}
-              variant="outline"
-              className="w-full border-purple-500/50 text-purple-300 hover:bg-purple-500/10"
-            >
-              Sign in as Admin (Demo)
-            </Button>
+            <p className="text-xs text-slate-400 text-center mt-4">
+              Sign in with your Google account to access your dashboard
+            </p>
 
             <p className="text-xs text-slate-400 text-center mt-4">
               By continuing, you agree to our Terms of Service and Privacy Policy
