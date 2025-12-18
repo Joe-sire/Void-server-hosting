@@ -188,10 +188,10 @@ export const LandingPage = () => {
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {mockFeatures.map((feature, index) => {
+          {features.map((feature, index) => {
             const Icon = iconMap[feature.icon];
             return (
-              <Card key={index} className="bg-slate-900/50 border-purple-500/20 backdrop-blur-sm hover:border-purple-500/50 transition-all hover:shadow-lg hover:shadow-purple-500/20 group">
+              <Card key={feature.feature_id || index} className="bg-slate-900/50 border-purple-500/20 backdrop-blur-sm hover:border-purple-500/50 transition-all hover:shadow-lg hover:shadow-purple-500/20 group">
                 <CardHeader>
                   <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-600/20 to-pink-600/20 flex items-center justify-center mb-4 group-hover:from-purple-600/30 group-hover:to-pink-600/30 transition-all">
                     <Icon className="text-purple-400" size={24} />
