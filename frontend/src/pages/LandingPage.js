@@ -220,7 +220,7 @@ export const LandingPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {plans.map((plan) => (
             <Card 
-              key={plan.id} 
+              key={plan.plan_id} 
               className={`bg-slate-900/50 border-purple-500/20 backdrop-blur-sm hover:border-purple-500/50 transition-all relative ${
                 plan.featured ? 'ring-2 ring-purple-500 scale-105' : ''
               }`}
