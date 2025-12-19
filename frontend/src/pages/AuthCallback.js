@@ -24,20 +24,30 @@ export const AuthCallback = () => {
 
         if (!sessionId) {
           console.error('No session_id found in URL');
+          console.log('Current URL:', window.location.href);
+          console.log('Hash:', location.hash);
           navigate('/login');
           return;
         }
 
+        console.log('Processing session_id:', sessionId);
+
         // Exchange session_id for user data
         const { user } = await authAPI.createSession(sessionId);
         
+        console.log('Session created successfully, user:', user);
+
         // Login user (stores in context and localStorage)
         login(user);
+
+        // Small delay to ensure cookie is set
+        await new Promise(resolve => setTimeout(resolve, 500));
 
         // Navigate to dashboard with user data
         navigate('/dashboard', { state: { user }, replace: true });
       } catch (error) {
         console.error('Auth callback error:', error);
+        console.error('Error details:', error.response?.data || error.message);
         navigate('/login');
       }
     };
