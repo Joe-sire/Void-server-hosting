@@ -22,10 +22,24 @@ export const LoginPage = () => {
     document.body.appendChild(script);
 
     script.onload = () => {
+      // Initialize Google Sign-In with One Tap (no redirect needed!)
       window.google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
         callback: handleCredentialResponse,
+        auto_select: false,
+        cancel_on_tap_outside: true,
       });
+
+      // Render the button
+      window.google.accounts.id.renderButton(
+        document.getElementById('google-signin-button'),
+        {
+          theme: 'outline',
+          size: 'large',
+          width: '100%',
+          text: 'continue_with',
+        }
+      );
     };
 
     return () => {
