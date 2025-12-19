@@ -38,7 +38,15 @@ function AppRoutes() {
   
   // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
   // Check for session_id in URL hash during render (before useEffect)
+  console.log('Current location:', location.pathname, 'Hash:', location.hash);
   if (location.hash?.includes('session_id=')) {
+    console.log('Found session_id in hash, rendering AuthCallback');
+    return <AuthCallback />;
+  }
+  
+  // Also check if we're on the /auth/callback route with hash
+  if (location.pathname === '/auth/callback') {
+    console.log('On /auth/callback route');
     return <AuthCallback />;
   }
   
