@@ -95,6 +95,13 @@ export const LoginPage = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div id="g_id_onload"
+              data-client_id={GOOGLE_CLIENT_ID}
+              data-context="signin"
+              data-ux_mode="popup"
+              data-auto_prompt="false">
+            </div>
+
             <Button 
               onClick={handleGoogleLogin}
               className="w-full bg-white text-slate-900 hover:bg-slate-100 font-medium"
