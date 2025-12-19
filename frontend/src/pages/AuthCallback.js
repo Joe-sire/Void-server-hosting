@@ -33,9 +33,15 @@ export const AuthCallback = () => {
         console.log('Processing session_id:', sessionId);
 
         // Exchange session_id for user data
-        const { user } = await authAPI.createSession(sessionId);
+        const response = await authAPI.createSession(sessionId);
+        const { user, session_token } = response;
         
         console.log('Session created successfully, user:', user);
+
+        // Store session_token in localStorage as fallback
+        if (session_token) {
+          localStorage.setItem('session_token', session_token);
+        }
 
         // Login user (stores in context and localStorage)
         login(user);
