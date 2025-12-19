@@ -21,6 +21,7 @@ from auth import (
 )
 from admin_routes import admin_user_router
 from google_auth import google_auth_router
+from simple_auth import simple_auth_router
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
