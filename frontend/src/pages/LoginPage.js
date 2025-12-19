@@ -1,19 +1,71 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { ArrowLeft } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
+
+const GOOGLE_CLIENT_ID = '963419862546-1c85b8aaqvf37fd6mh49b4u05l0ao44m.apps.googleusercontent.com';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 export const LoginPage = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
+
+  useEffect(() => {
+    // Load Google Sign-In script
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+
+    script.onload = () => {
+      window.google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleCredentialResponse,
+      });
+    };
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  const handleCredentialResponse = async (response) => {
+    try {
+      console.log('Google Sign-In successful, verifying token...');
+      
+      // Send token to backend for verification
+      const result = await axios.post(
+        `${BACKEND_URL}/api/auth/google/verify`,
+        { token: response.credential },
+        { withCredentials: true }
+      );
+
+      const { user, session_token } = result.data;
+      
+      // Store session token
+      if (session_token) {
+        localStorage.setItem('session_token', session_token);
+      }
+
+      // Login user
+      login(user);
+
+      // Navigate to dashboard
+      navigate(user.role === 'admin' ? '/admin' : '/dashboard');
+      
+    } catch (error) {
+      console.error('Login failed:', error);
+      alert('Login failed. Please try again.');
+    }
+  };
 
   const handleGoogleLogin = () => {
-    // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
-    // Use the actual deployed URL from window.location
-    const baseUrl = window.location.origin;
-    const redirectUrl = `${baseUrl}/auth/callback`;
-    console.log('Redirecting to auth with callback URL:', redirectUrl);
-    window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
+    // Trigger Google Sign-In
+    window.google.accounts.id.prompt();
   };
 
   return (
