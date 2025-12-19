@@ -104,6 +104,13 @@ export const AdminPanel = () => {
             <div className="flex items-center gap-4">
               <Button 
                 variant="outline" 
+                onClick={() => navigate('/admin/users')}
+                className="border-purple-500/50 text-purple-300 hover:bg-purple-500/10"
+              >
+                Manage Users
+              </Button>
+              <Button 
+                variant="outline" 
                 onClick={() => navigate('/dashboard')}
                 className="border-purple-500/50 text-purple-300 hover:bg-purple-500/10"
               >
