@@ -13,8 +13,19 @@ import { Toaster } from "./components/ui/sonner";
 // Protected Route Component
 const ProtectedRoute = ({ children, adminOnly = false }) => {
   const { isAuthenticated, isAdmin, loading } = useAuth();
+  const location = useLocation();
+
+  // If user data was passed from AuthCallback, use it immediately
+  if (location.state?.user) {
+    console.log('User data from AuthCallback state:', location.state.user);
+    if (adminOnly && location.state.user.role !== 'admin') {
+      return <Navigate to="/dashboard" replace />;
+    }
+    return children;
+  }
 
   if (loading) {
+    console.log('ProtectedRoute: Loading...');
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center">
         <div className="text-white text-xl">Loading...</div>
@@ -23,13 +34,16 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
   }
 
   if (!isAuthenticated) {
+    console.log('ProtectedRoute: Not authenticated, redirecting to login');
     return <Navigate to="/login" replace />;
   }
 
   if (adminOnly && !isAdmin) {
+    console.log('ProtectedRoute: Not admin, redirecting to dashboard');
     return <Navigate to="/dashboard" replace />;
   }
 
+  console.log('ProtectedRoute: Authenticated, rendering children');
   return children;
 };
 
