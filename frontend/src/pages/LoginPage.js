@@ -9,7 +9,10 @@ export const LoginPage = () => {
 
   const handleGoogleLogin = () => {
     // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
-    const redirectUrl = window.location.origin + '/auth/callback';
+    // Use the actual deployed URL from window.location
+    const baseUrl = window.location.origin;
+    const redirectUrl = `${baseUrl}/auth/callback`;
+    console.log('Redirecting to auth with callback URL:', redirectUrl);
     window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
   };
 
