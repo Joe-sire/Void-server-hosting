@@ -20,8 +20,7 @@ from auth import (
     get_current_user, require_admin, set_session_cookie, clear_session_cookie
 )
 from admin_routes import admin_user_router
-from google_auth import google_auth_router
-from simple_auth import simple_auth_router
+from user_auth import user_auth_router
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -417,8 +416,7 @@ async def update_site_content(request: Request, updates: SiteContentUpdate):
 # Include the routers in the main app
 app.include_router(api_router)
 app.include_router(admin_user_router, prefix="/api")
-app.include_router(google_auth_router, prefix="/api")
-app.include_router(simple_auth_router, prefix="/api")
+app.include_router(user_auth_router, prefix="/api")
 
 app.add_middleware(
     CORSMiddleware,
