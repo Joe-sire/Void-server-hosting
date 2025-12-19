@@ -1,68 +1,37 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
 import { ArrowLeft } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 
-const GOOGLE_CLIENT_ID = '963419862546-1c85b8aaqvf37fd6mh49b4u05l0ao44m.apps.googleusercontent.com';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 export const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const [email, setEmail] = useState('');
+  const [accessCode, setAccessCode] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  useEffect(() => {
-    // Load Google Sign-In script
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
-    script.async = true;
-    script.defer = true;
-    document.body.appendChild(script);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
 
-    script.onload = () => {
-      // Initialize Google Sign-In with One Tap (no redirect needed!)
-      window.google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: handleCredentialResponse,
-        auto_select: false,
-        cancel_on_tap_outside: true,
-      });
-
-      // Render the button
-      window.google.accounts.id.renderButton(
-        document.getElementById('google-signin-button'),
-        {
-          theme: 'outline',
-          size: 'large',
-          width: '100%',
-          text: 'continue_with',
-        }
-      );
-    };
-
-    return () => {
-      if (document.body.contains(script)) {
-        document.body.removeChild(script);
-      }
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleCredentialResponse = async (response) => {
     try {
-      console.log('Google Sign-In successful, verifying token...');
-      
-      // Send token to backend for verification
-      const result = await axios.post(
-        `${BACKEND_URL}/api/auth/google/verify`,
-        { token: response.credential },
+      const response = await axios.post(
+        `${BACKEND_URL}/api/auth/login`,
+        { email, access_code: accessCode },
         { withCredentials: true }
       );
 
-      const { user, session_token } = result.data;
-      
+      const { user, session_token } = response.data;
+
       // Store session token
       if (session_token) {
         localStorage.setItem('session_token', session_token);
@@ -71,18 +40,14 @@ export const LoginPage = () => {
       // Login user
       login(user);
 
-      // Navigate to dashboard
+      // Navigate based on role
       navigate(user.role === 'admin' ? '/admin' : '/dashboard');
-      
-    } catch (error) {
-      console.error('Login failed:', error);
-      alert('Login failed. Please try again.');
+    } catch (err) {
+      console.error('Login error:', err);
+      setError(err.response?.data?.detail || 'Invalid email or access code');
+    } finally {
+      setLoading(false);
     }
-  };
-
-  const handleGoogleLogin = () => {
-    // Trigger Google Sign-In
-    window.google.accounts.id.prompt();
   };
 
   return (
@@ -111,16 +76,51 @@ export const LoginPage = () => {
               Sign in to access your dashboard
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {/* Google Sign-In Button */}
-            <div id="google-signin-button" className="w-full flex justify-center"></div>
+          <CardContent>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <Label htmlFor="email" className="text-slate-300">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="mt-2 bg-slate-900 border-purple-500/20 text-white focus:border-purple-500"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="accessCode" className="text-slate-300">Access Code</Label>
+                <Input
+                  id="accessCode"
+                  type="password"
+                  placeholder="Enter your access code"
+                  value={accessCode}
+                  onChange={(e) => setAccessCode(e.target.value)}
+                  required
+                  className="mt-2 bg-slate-900 border-purple-500/20 text-white focus:border-purple-500"
+                />
+              </div>
+
+              {error && (
+                <div className="text-red-400 text-sm text-center p-2 bg-red-500/10 border border-red-500/20 rounded">
+                  {error}
+                </div>
+              )}
+
+              <Button 
+                type="submit"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+              >
+                {loading ? 'Signing in...' : 'Sign In'}
+              </Button>
+            </form>
 
             <p className="text-xs text-slate-400 text-center mt-4">
-              Sign in with your Google account to access your dashboard
-            </p>
-
-            <p className="text-xs text-slate-400 text-center mt-4">
-              By continuing, you agree to our Terms of Service and Privacy Policy
+              Contact admin for your access code
             </p>
           </CardContent>
         </Card>
