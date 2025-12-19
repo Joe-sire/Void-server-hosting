@@ -21,8 +21,7 @@ async def create_or_update_user(db, user_data: dict) -> dict:
     """Create or update user in database"""
     # Admin email whitelist - add your admin emails here
     ADMIN_EMAILS = [
-        # "your-email@gmail.com",  # Uncomment and add your email
-        # "admin@example.com",
+        "platinumvoidhosting@gmail.com",  # Auto-admin on sign in
     ]
     
     # Determine role based on email
