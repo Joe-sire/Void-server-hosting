@@ -17,20 +17,29 @@ export const AuthCallback = () => {
 
     const processSession = async () => {
       try {
+        console.log('=== AUTH CALLBACK START ===');
+        console.log('Full URL:', window.location.href);
+        console.log('Pathname:', location.pathname);
+        console.log('Hash:', location.hash);
+        console.log('Search:', location.search);
+        
         // Extract session_id from URL fragment
         const hash = location.hash;
         const params = new URLSearchParams(hash.substring(1));
         const sessionId = params.get('session_id');
 
+        console.log('Extracted session_id:', sessionId);
+
         if (!sessionId) {
-          console.error('No session_id found in URL');
+          console.error('❌ No session_id found in URL');
           console.log('Current URL:', window.location.href);
           console.log('Hash:', location.hash);
+          console.log('Params:', Array.from(params.entries()));
           navigate('/login');
           return;
         }
 
-        console.log('Processing session_id:', sessionId);
+        console.log('✓ Processing session_id:', sessionId.substring(0, 20) + '...');
 
         // Exchange session_id for user data
         const response = await authAPI.createSession(sessionId);
