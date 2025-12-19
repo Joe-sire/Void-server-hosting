@@ -418,6 +418,7 @@ async def update_site_content(request: Request, updates: SiteContentUpdate):
 app.include_router(api_router)
 app.include_router(admin_user_router, prefix="/api")
 app.include_router(google_auth_router, prefix="/api")
+app.include_router(simple_auth_router, prefix="/api")
 
 app.add_middleware(
     CORSMiddleware,
