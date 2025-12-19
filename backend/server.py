@@ -60,7 +60,7 @@ async def create_auth_session(request: Request, response: Response):
     # Set httpOnly cookie
     set_session_cookie(response, session_token)
     
-    return {"user": user}
+    return {"user": user, "session_token": session_token}
 
 
 @api_router.get("/auth/me")
